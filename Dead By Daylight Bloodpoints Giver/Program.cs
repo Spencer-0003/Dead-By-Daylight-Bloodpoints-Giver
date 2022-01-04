@@ -23,7 +23,7 @@ namespace Dead_By_Daylight_Bloodpoints_Giver
         }
 
         // Main
-        static void Main(string[] args)
+        static void Main()
         {
             Console.Title = "Dead By Daylight Bloodpoint Giver";
             Console.WriteLine("Enter your bhvrSession.");
