@@ -7,7 +7,7 @@ namespace Dead_By_Daylight_Bloodpoints_Giver
     internal class Program
     {
         // Functions
-        static bool validateBloodpoints(string points)
+        static bool ValidateBloodpoints(string points)
         {
             int normalized;
             try
@@ -40,7 +40,7 @@ namespace Dead_By_Daylight_Bloodpoints_Giver
                 return;
             }
 
-            if (!validateBloodpoints(bloodpoints))
+            if (!ValidateBloodpoints(bloodpoints))
             {
                 Console.WriteLine("Invalid bloodpoints.");
                 Console.ReadKey();
