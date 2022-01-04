@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text;
 
 namespace Dead_By_Daylight_Bloodpoints_Giver
 {
@@ -28,7 +29,7 @@ namespace Dead_By_Daylight_Bloodpoints_Giver
             Console.Title = "Dead By Daylight Bloodpoint Giver";
             Console.WriteLine("Enter your bhvrSession.");
 
-            string bhvrSession = Console.ReadLine();
+            string bhvrSession = Console.ReadLine().Replace("bhvrSession=", "");
             Console.WriteLine("How many bloodpoints do you want? (1 - 1,000,000).");
             string bloodpoints = Console.ReadLine();
 
@@ -61,21 +62,18 @@ namespace Dead_By_Daylight_Bloodpoints_Giver
             request.CookieContainer = new CookieContainer();
 
             // Create cookie
-            Cookie session = new Cookie();
-            session.Name = "bhvrSession";
-            session.Value = bhvrSession;
-            session.Domain = "brill.live.bhvrdbd.com";
-            request.CookieContainer.Add(session);
-
-            // Add request body & send request
-            using (Stream requestStream = request.GetRequestStream())
+            request.CookieContainer.Add(new Cookie
             {
-                using (StreamWriter streamWriter = new StreamWriter(requestStream))
-                {
-                    streamWriter.Write("{\"data\":{\"rewardType\":\"Story\",\"walletToGrant\":{\"balance\":" + bloodpoints + ",\"currency\":\"Bloodpoints\"}}}");
-                }
-            }
+                Name = "bhvrSession",
+                Value = bhvrSession,
+                Domain = "brill.live.bhvrdbd.com"
+            });
 
+            // Add request body
+            byte[] data = Encoding.ASCII.GetBytes("{\"data\":{\"rewardType\":\"Story\",\"walletToGrant\":{\"balance\":" + bloodpoints + ",\"currency\":\"Bloodpoints\"}}}");
+            request.GetRequestStream().Write(data, 0, data.Length);
+
+            // Send request
             try
             {
                 request.GetResponse();
